@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - FERREMAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+    <div class="admin-wrapper">
+        <!-- Barra lateral -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2>FERREMAS</h2>
+                <p>Panel de Administración</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="products.html"><i class="fas fa-box"></i> Productos</a>
+                    </li>
+                    <li>
+                        <a href="categories.html"><i class="fas fa-tags"></i> Categorías</a>
+                    </li>
+                    <li>
+                        <a href="brands.html"><i class="fas fa-copyright"></i> Marcas</a>
+                    </li>
+                    <li>
+                        <a href="orders.html"><i class="fas fa-shopping-cart"></i> Pedidos</a>
+                    </li>
+                    <li>
+                        <a href="users.html"><i class="fas fa-users"></i> Usuarios</a>
+                    </li>
+                    <li>
+                        <a href="reports.html"><i class="fas fa-chart-bar"></i> Reportes</a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="../index.html"><i class="fas fa-home"></i> Ir a la tienda</a>
+                <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+            </div>
+        </aside>
+        
+        <!-- Contenido principal -->
+        <main class="admin-content">
+            <header class="admin-header">
+                <div class="header-search">
+                    <input type="text" placeholder="Buscar...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                
+                <div class="header-user">
+                    <div class="notifications">
+                        <a href="#"><i class="fas fa-bell"></i><span class="badge">3</span></a>
+                    </div>
+                    <div class="user-info">
+                        <img src="https://via.placeholder.com/40" alt="Usuario" class="user-avatar">
+                        <span class="user-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h1>Dashboard</h1>
+                    <p>Bienvenido al panel de administración</p>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="stat-card-info">
+                            <h3>Ventas del Día</h3>
+                            <p class="stat-value" id="daily-sales">$0</p>
+                            <p class="stat-change positive">+5% respecto a ayer</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <div class="stat-card-info">
+                            <h3>Pedidos Nuevos</h3>
+                            <p class="stat-value" id="new-orders">0</p>
+                            <p class="stat-change neutral">Sin cambios</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-card-info">
+                            <h3>Clientes Nuevos</h3>
+                            <p class="stat-value" id="new-customers">0</p>
+                            <p class="stat-change positive">+12% respecto a ayer</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="stat-card-info">
+                            <h3>Productos</h3>
+                            <p class="stat-value" id="total-products">0</p>
+                            <p class="stat-change negative">-3% stock bajo</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card orders-table">
+                        <div class="card-header">
+                            <h2>Pedidos Recientes</h2>
+                            <a href="orders.html" class="view-all">Ver todos</a>
+                        </div>
+                        <div class="card-body">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Cliente</th>
+                                        <th>Fecha</th>
+                                        <th>Total</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-orders">
+                                    <tr>
+                                        <td colspan="6" class="text-center">Cargando pedidos...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card low-stock">
+                        <div class="card-header">
+                            <h2>Productos con Stock Bajo</h2>
+                            <a href="products.html?filter=low-stock" class="view-all">Ver todos</a>
+                        </div>
+                        <div class="card-body">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Stock Actual</th>
+                                        <th>Stock Mínimo</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="low-stock-products">
+                                    <tr>
+                                        <td colspan="5" class="text-center">Cargando productos...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="../js/main.js"></script>
+    <script src="../js/admin/dashboard.js"></script>
+</body>
+</html>

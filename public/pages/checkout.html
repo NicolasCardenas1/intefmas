@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra - FERREMAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/checkout.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><a href="../index.html">FERREMAS</a></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Inicio</a></li>
+                    <li><a href="products.html">Productos</a></li>
+                    <li><a href="#">Nosotros</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <!-- Se actualizará dinámicamente -->
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1>Finalizar Compra</h1>
+            </div>
+
+            <div class="checkout-container">
+                <form id="checkout-form" class="checkout-form">
+                    <div class="checkout-steps">
+                        <div class="checkout-step active" data-step="delivery">
+                            <div class="step-header">
+                                <h3><span class="step-number">1</span> Método de Entrega</h3>
+                            </div>
+                            <div class="step-content">
+                                <div class="delivery-options">
+                                    <div class="delivery-option">
+                                        <input type="radio" id="retiro-tienda" name="tipo_entrega" value="retiro_tienda" checked>
+                                        <label for="retiro-tienda">Retiro en Tienda</label>
+                                    </div>
+                                    <div class="delivery-option">
+                                        <input type="radio" id="despacho-domicilio" name="tipo_entrega" value="despacho_domicilio">
+                                        <label for="despacho-domicilio">Despacho a Domicilio</label>
+                                    </div>
+                                </div>
+
+                                <div id="branch-select-container" class="form-group">
+                                    <label for="sucursal">Sucursal para Retiro</label>
+                                    <select id="sucursal" name="sucursal_retiro_id" required>
+                                        <option value="">Selecciona una sucursal</option>
+                                        <!-- Se cargarán dinámicamente -->
+                                    </select>
+                                </div>
+
+                                <div id="shipping-address-container" class="shipping-address-container" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="direccion">Dirección</label>
+                                        <input type="text" id="direccion" name="direccion_entrega">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="ciudad">Ciudad</label>
+                                            <input type="text" id="ciudad" name="ciudad_entrega">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="region">Región</label>
+                                            <select id="region" name="region_entrega">
+                                                <option value="">Selecciona una región</option>
+                                                <option value="Arica y Parinacota">Arica y Parinacota</option>
+                                                <option value="Tarapacá">Tarapacá</option>
+                                                <option value="Antofagasta">Antofagasta</option>
+                                                <option value="Atacama">Atacama</option>
+                                                <option value="Coquimbo">Coquimbo</option>
+                                                <option value="Valparaíso">Valparaíso</option>
+                                                <option value="Metropolitana">Metropolitana</option>
+                                                <option value="O'Higgins">O'Higgins</option>
+                                                <option value="Maule">Maule</option>
+                                                <option value="Ñuble">Ñuble</option>
+                                                <option value="Biobío">Biobío</option>
+                                                <option value="Araucanía">Araucanía</option>
+                                                <option value="Los Ríos">Los Ríos</option>
+                                                <option value="Los Lagos">Los Lagos</option>
+                                                <option value="Aysén">Aysén</option>
+                                                <option value="Magallanes">Magallanes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="step-actions">
+                                    <button type="button" class="btn next-step" data-next="payment">Continuar a Método de Pago</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkout-step" data-step="payment">
+                            <div class="step-header">
+                                <h3><span class="step-number">2</span> Método de Pago</h3>
+                            </div>
+                            <div class="step-content">
+                                <div class="payment-options">
+                                    <div class="payment-option">
+                                        <input type="radio" id="pago-webpay" name="metodo_pago" value="webpay" checked>
+                                        <label for="pago-webpay">WebPay (Tarjeta de crédito/débito)</label>
+                                    </div>
+                                    <div class="payment-option">
+                                        <input type="radio" id="pago-transferencia" name="metodo_pago" value="transferencia">
+                                        <label for="pago-transferencia">Transferencia Bancaria</label>
+                                    </div>
+                                </div>
+
+                                <div id="transferencia-container" class="transferencia-container" style="display: none;">
+                                    <div class="bank-details">
+                                        <h4>Datos para la Transferencia</h4>
+                                        <p><strong>Nombre:</strong> FERREMAS SpA</p>
+                                        <p><strong>RUT:</strong> 76.123.456-7</p>
+                                        <p><strong>Banco:</strong> Banco de Chile</p>
+                                        <p><strong>Tipo de Cuenta:</strong> Cuenta Corriente</p>
+                                        <p><strong>N° de Cuenta:</strong> 123-45678-90</p>
+                                        <p><strong>Email:</strong> pagos@ferremas.cl</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="comprobante">N° de Comprobante (opcional)</label>
+                                        <input type="text" id="comprobante" name="comprobante">
+                                    </div>
+                                </div>
+
+                                <div class="step-actions">
+                                    <button type="button" class="btn back-step" data-back="delivery">Volver a Método de Entrega</button>
+                                    <button type="button" class="btn next-step" data-next="confirmation">Continuar a Confirmación</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkout-step" data-step="confirmation">
+                            <div class="step-header">
+                                <h3><span class="step-number">3</span> Confirmar Pedido</h3>
+                            </div>
+                            <div class="step-content">
+                                <div class="order-summary">
+                                    <h4>Resumen del Pedido</h4>
+                                    <div id="order-items" class="order-items">
+                                        <!-- Se cargará dinámicamente -->
+                                        <div class="loading-spinner"></div>
+                                    </div>
+                                    <div id="order-totals" class="order-totals">
+                                        <!-- Se cargará dinámicamente -->
+                                    </div>
+                                </div>
+
+                                <div class="delivery-summary">
+                                    <h4>Método de Entrega</h4>
+                                    <div id="delivery-details">
+                                        <!-- Se cargará dinámicamente -->
+                                    </div>
+                                </div>
+
+                                <div class="payment-summary">
+                                    <h4>Método de Pago</h4>
+                                    <div id="payment-details">
+                                        <!-- Se cargará dinámicamente -->
+                                    </div>
+                                </div>
+
+                                <div class="form-group terms-container">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="terms" name="terms" required>
+                                        <label for="terms">He leído y acepto los <a href="#" target="_blank">Términos y Condiciones</a></label>
+                                    </div>
+                                </div>
+
+                                <div class="step-actions">
+                                    <button type="button" class="btn back-step" data-back="payment">Volver a Método de Pago</button>
+                                    <button type="submit" class="btn confirm-order">Confirmar Pedido</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="checkout-sidebar">
+                    <div class="cart-summary">
+                        <h3>Resumen de la Compra</h3>
+                        <div id="cart-items-summary" class="cart-items-summary">
+                            <!-- Se cargará dinámicamente -->
+                            <div class="loading-spinner"></div>
+                        </div>
+                        <div id="cart-totals-summary" class="cart-totals-summary">
+                            <!-- Se cargará dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FERREMAS</h3>
+                    <p>Distribuidora de productos de ferretería y construcción desde 1980.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces rápidos</h3>
+                    <ul>
+                        <li><a href="../index.html">Inicio</a></li>
+                        <li><a href="products.html">Productos</a></li>
+                        <li><a href="#">Nosotros</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contáctanos</h3>
+                    <p>Santiago, Chile</p>
+                    <p>Email: info@ferremas.cl</p>
+                    <p>Teléfono: +56 2 2123 4567</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Síguenos</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 FERREMAS. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/checkout.js"></script>
+</body>
+</html>

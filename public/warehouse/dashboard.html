@@ -1,0 +1,159 @@
+<!-- warehouse/dashboard.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Bodega - FERREMAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../admin/css/admin.css">
+</head>
+<body class="admin-body">
+    <div class="admin-wrapper">
+        <!-- Barra lateral -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2>FERREMAS</h2>
+                <p>Panel de Bodega</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="inventory.html"><i class="fas fa-boxes"></i> Inventario</a>
+                    </li>
+                    <li>
+                        <a href="orders.html"><i class="fas fa-clipboard-list"></i> Órdenes</a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="../index.html"><i class="fas fa-home"></i> Ir a la tienda</a>
+                <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+            </div>
+        </aside>
+        
+        <!-- Contenido principal -->
+        <main class="admin-content">
+            <header class="admin-header">
+                <div class="header-search">
+                    <input type="text" placeholder="Buscar producto...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                
+                <div class="header-user">
+                    <div class="notifications">
+                        <a href="#"><i class="fas fa-bell"></i><span class="badge">5</span></a>
+                    </div>
+                    <div class="user-info">
+                        <img src="https://via.placeholder.com/40" alt="Usuario" class="user-avatar">
+                        <span class="user-name">Bodeguero</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h1>Dashboard de Bodega</h1>
+                    <p>Gestión de inventario y órdenes</p>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-card-info">
+                            <h3>Total Productos</h3>
+                            <p class="stat-value" id="total-products">0</p>
+                            <p class="stat-change neutral">Sin cambios</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-card-info">
+                            <h3>Stock Bajo</h3>
+                            <p class="stat-value" id="low-stock">0</p>
+                            <p class="stat-change negative">+2 desde ayer</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="stat-card-info">
+                            <h3>Órdenes por Preparar</h3>
+                            <p class="stat-value" id="orders-to-prepare">0</p>
+                            <p class="stat-change positive">-3 desde ayer</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card orders-table">
+                        <div class="card-header">
+                            <h2>Órdenes por Preparar</h2>
+                            <a href="orders.html" class="view-all">Ver todas</a>
+                        </div>
+                        <div class="card-body">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Fecha</th>
+                                        <th>Productos</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orders-to-prepare-table">
+                                    <tr>
+                                        <td colspan="5" class="text-center">Cargando órdenes...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card low-stock">
+                        <div class="card-header">
+                            <h2>Productos con Stock Bajo</h2>
+                            <a href="inventory.html?filter=low-stock" class="view-all">Ver todos</a>
+                        </div>
+                        <div class="card-body">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Stock Actual</th>
+                                        <th>Stock Mínimo</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="low-stock-products">
+                                    <tr>
+                                        <td colspan="5" class="text-center">Cargando productos...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="../js/main.js"></script>
+    <script src="../js/warehouse/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!-- accounting/dashboard.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Contabilidad - FERREMAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../admin/css/admin.css">
+</head>
+<body class="admin-body">
+    <div class="admin-wrapper">
+        <!-- Barra lateral -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2>FERREMAS</h2>
+                <p>Panel de Contabilidad</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="payments.html"><i class="fas fa-credit-card"></i> Pagos</a>
+                    </li>
+                    <li>
+                        <a href="invoices.html"><i class="fas fa-file-invoice-dollar"></i> Facturas</a>
+                    </li>
+                    <li>
+                        <a href="reports.html"><i class="fas fa-chart-line"></i> Informes</a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="../index.html"><i class="fas fa-home"></i> Ir a la tienda</a>
+                <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+            </div>
+        </aside>
+        
+        <!-- Contenido principal -->
+        <main class="admin-content">
+            <header class="admin-header">
+                <div class="header-search">
+                    <input type="text" placeholder="Buscar transacción...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                
+                <div class="header-user">
+                    <div class="notifications">
+                        <a href="#"><i class="fas fa-bell"></i><span class="badge">3</span></a>
+                    </div>
+                    <div class="user-info">
+                        <img src="https://via.placeholder.com/40" alt="Usuario" class="user-avatar">
+                        <span class="user-name">Contador</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h1>Dashboard de Contabilidad</h1>
+                    <p>Gestión financiera y reportes</p>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-card-info">
+                            <h3>Ventas del Mes</h3>
+                            <p class="stat-value" id="monthly-sales">$0</p>
+                            <p class="stat-change positive">+12% respecto al mes anterior</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="stat-card-info">
+                            <h3>Pagos Pendientes</h3>
+                            <p class="stat-value" id="pending-payments">0</p>
+                            <p class="stat-change negative">+5 desde ayer</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="stat-card-info">
+                            <h3>Facturas Emitidas</h3>
+                            <p class="stat-value" id="issued-invoices">0</p>
+                            <p class="stat-change neutral">Sin cambios</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card payments-table">
+                        <div class="card-header">
+                            <h2>Pagos por Confirmar</h2>
+                            <a href="payments.html" class="view-all">Ver todos</a>
+                        </div>
+                        <div class="card-body">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Pedido</th>
+                                        <th>Cliente</th>
+                                        <th>Monto</th>
+                                        <th>Método</th>
+                                        <th>Fecha</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pending-payments-table">
+                                    <tr>
+                                        <td colspan="6" class="text-center">Cargando pagos...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card sales-chart">
+                        <div class="card-header">
+                            <h2>Ventas Mensuales</h2>
+                            <div class="chart-filters">
+                                <select id="chart-period">
+                                    <option value="month">Este Mes</option>
+                                    <option value="quarter">Este Trimestre</option>
+                                    <option value="year">Este Año</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="sales-chart-container" style="height: 300px;">
+                                <!-- Aquí iría un gráfico de ventas -->
+                                <div class="chart-placeholder">
+                                    <i class="fas fa-chart-line"></i>
+                                    <p>Gráfico de ventas se cargará aquí</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="../js/main.js"></script>
+    <script src="../js/accounting/dashboard.js"></script>
+</body>
+</html>

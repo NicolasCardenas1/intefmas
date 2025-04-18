@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pedidos - FERREMAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../admin/css/admin.css">
+</head>
+<body class="admin-body">
+    <div class="admin-wrapper">
+        <!-- Barra lateral -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2>FERREMAS</h2>
+                <p>Panel de Vendedor</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li class="active">
+                        <a href="orders.html"><i class="fas fa-shopping-cart"></i> Pedidos</a>
+                    </li>
+                    <li>
+                        <a href="catalog.html"><i class="fas fa-box"></i> Catálogo</a>
+                    </li>
+                    <li>
+                        <a href="customers.html"><i class="fas fa-users"></i> Clientes</a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="../index.html"><i class="fas fa-home"></i> Ir a la tienda</a>
+                <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+            </div>
+        </aside>
+        
+        <!-- Contenido principal -->
+        <main class="admin-content">
+            <header class="admin-header">
+                <div class="header-search">
+                    <input type="text" placeholder="Buscar pedido...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                
+                <div class="header-user">
+                    <div class="notifications">
+                        <a href="#"><i class="fas fa-bell"></i><span class="badge">2</span></a>
+                    </div>
+                    <div class="user-info">
+                        <img src="https://via.placeholder.com/40" alt="Usuario" class="user-avatar">
+                        <span class="user-name">Vendedor</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h1>Gestión de Pedidos</h1>
+                    <p>Administra los pedidos de los clientes</p>
+                </div>
+                
+                <div class="action-bar">
+                    <div class="filter-group">
+                        <select id="estado-filter">
+                            <option value="">Todos los estados</option>
+                            <option value="pendiente">Pendientes</option>
+                            <option value="aprobado">Aprobados</option>
+                            <option value="rechazado">Rechazados</option>
+                            <option value="en_preparacion">En preparación</option>
+                            <option value="listo_para_entrega">Listos para entrega</option>
+                            <option value="en_camino">En camino</option>
+                            <option value="entregado">Entregados</option>
+                            <option value="cancelado">Cancelados</option>
+                        </select>
+                        <input type="date" id="fecha-desde" placeholder="Fecha desde">
+                        <input type="date" id="fecha-hasta" placeholder="Fecha hasta">
+                        <button id="apply-filters" class="btn btn-secondary"><i class="fas fa-filter"></i> Filtrar</button>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Tipo de Entrega</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body">
+                            <tr>
+                                <td colspan="7" class="text-center">Cargando pedidos...</td>
+                            </tr>
+                        </tbody>
+                    </table>

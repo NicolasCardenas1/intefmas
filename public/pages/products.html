@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - FERREMAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/products.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><a href="../index.html">FERREMAS</a></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Inicio</a></li>
+                    <li><a href="products.html" class="active">Productos</a></li>
+                    <li><a href="#">Nosotros</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="login.html" class="btn login">Iniciar Sesión</a>
+                <a href="register.html" class="btn register">Registrarse</a>
+                <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1>Catálogo de Productos</h1>
+            </div>
+
+            <div class="products-layout">
+                <aside class="filters">
+                    <div class="filter-section">
+                        <h3>Categorías</h3>
+                        <div id="categories-filter" class="filter-options">
+                            <!-- Categorías se cargarán dinámicamente -->
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3>Marcas</h3>
+                        <div id="brands-filter" class="filter-options">
+                            <!-- Marcas se cargarán dinámicamente -->
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3>Precio</h3>
+                        <div class="price-filter">
+                            <div class="price-inputs">
+                                <input type="number" id="min-price" placeholder="Mín">
+                                <span>-</span>
+                                <input type="number" id="max-price" placeholder="Máx">
+                            </div>
+                            <button id="apply-price" class="btn filter-btn">Aplicar</button>
+                        </div>
+                    </div>
+                </aside>
+
+                <section class="products-content">
+                    <div class="products-header">
+                        <div class="products-count" id="products-count">
+                            Cargando productos...
+                        </div>
+                        <div class="products-sort">
+                            <label for="sort-by">Ordenar por:</label>
+                            <select id="sort-by">
+                                <option value="name_asc">Nombre (A-Z)</option>
+                                <option value="name_desc">Nombre (Z-A)</option>
+                                <option value="price_asc">Precio (Menor a Mayor)</option>
+                                <option value="price_desc">Precio (Mayor a Menor)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="products-grid" id="products-container">
+                        <!-- Productos se cargarán dinámicamente -->
+                        <div class="product-card skeleton"></div>
+                        <div class="product-card skeleton"></div>
+                        <div class="product-card skeleton"></div>
+                        <div class="product-card skeleton"></div>
+                        <div class="product-card skeleton"></div>
+                        <div class="product-card skeleton"></div>
+                    </div>
+
+                    <div class="pagination" id="pagination">
+                        <!-- Paginación se generará dinámicamente -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FERREMAS</h3>
+                    <p>Distribuidora de productos de ferretería y construcción desde 1980.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces rápidos</h3>
+                    <ul>
+                        <li><a href="../index.html">Inicio</a></li>
+                        <li><a href="products.html">Productos</a></li>
+                        <li><a href="#">Nosotros</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contáctanos</h3>
+                    <p>Santiago, Chile</p>
+                    <p>Email: info@ferremas.cl</p>
+                    <p>Teléfono: +56 2 2123 4567</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Síguenos</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 FERREMAS. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/catalog.js"></script>
+</body>
+</html>
