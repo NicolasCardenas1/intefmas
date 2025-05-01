@@ -6,6 +6,9 @@ const path = require('path');
 // Configuración de variables de entorno
 require('dotenv').config();
 
+// Importar Swagger
+const { swaggerUi, swaggerDocs } = require('./swagger');
+
 // Importar modelos
 const models = require('./models');
 
@@ -27,6 +30,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
+
+// Configuración de Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
@@ -64,6 +70,7 @@ const startServer = async () => {
     
     app.listen(PORT, () => {
       console.log('Servidor corriendo en http://localhost:' + PORT);
+      console.log('Documentación Swagger disponible en http://localhost:' + PORT + '/api-docs');
     });
   } catch (error) {
     console.error('Error al iniciar el servidor:', error);

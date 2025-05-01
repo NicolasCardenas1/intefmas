@@ -12,14 +12,14 @@ const swaggerOptions = {
       description: 'API para el sistema de gestión comercial FERREMAS',
       contact: {
         name: 'Equipo de Desarrollo FERREMAS'
-      },
-      servers: [
-        {
-          url: 'http://localhost:3000',
-          description: 'Servidor de desarrollo'
-        }
-      ]
-    }
+      }
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+        description: 'Servidor de desarrollo'
+      }
+    ]
   },
   // Rutas para los archivos con anotaciones JSDoc
   apis: ['./routes/*.js']
