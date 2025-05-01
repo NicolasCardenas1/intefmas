@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 
-const Inventory = sequelize.define('Inventory', {
+const InventoryMovement = sequelize.define('InventoryMovement', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -15,27 +15,33 @@ const Inventory = sequelize.define('Inventory', {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  stock: {
+  usuario_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 0
+    allowNull: false
   },
-  stock_minimo: {
+  tipo_movimiento: {
+    type: DataTypes.ENUM('entrada', 'salida', 'ajuste'),
+    allowNull: false
+  },
+  cantidad: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 5
+    allowNull: false
   },
-  ubicacion: {
-    type: DataTypes.STRING,
-    allowNull: true
+  stock_anterior: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   },
-  ultima_actualizacion: {
+  stock_nuevo: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  fecha: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'inventory',
+  tableName: 'inventory_movements',
   timestamps: true
 });
 
-module.exports = Inventory;
+module.exports = InventoryMovement;

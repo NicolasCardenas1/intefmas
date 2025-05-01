@@ -4,6 +4,7 @@ const Brand = require('./brand.model');
 const Product = require('./product.model');
 const Branch = require('./branch.model');
 const Inventory = require('./inventory.model');
+const InventoryMovement = require('./inventoryMovement.model');
 const Order = require('./order.model');
 const OrderDetail = require('./orderDetail.model');
 const Payment = require('./payment.model');
@@ -25,6 +26,16 @@ Product.hasMany(Inventory, { foreignKey: 'producto_id' });
 
 Inventory.belongsTo(Branch, { foreignKey: 'sucursal_id' });
 Branch.hasMany(Inventory, { foreignKey: 'sucursal_id' });
+
+// Relaciones para movimientos de inventario
+InventoryMovement.belongsTo(Product, { foreignKey: 'producto_id' });
+Product.hasMany(InventoryMovement, { foreignKey: 'producto_id' });
+
+InventoryMovement.belongsTo(Branch, { foreignKey: 'sucursal_id' });
+Branch.hasMany(InventoryMovement, { foreignKey: 'sucursal_id' });
+
+InventoryMovement.belongsTo(User, { foreignKey: 'usuario_id' });
+User.hasMany(InventoryMovement, { foreignKey: 'usuario_id' });
 
 // Relaciones para pedidos
 Order.belongsTo(User, { as: 'cliente', foreignKey: 'cliente_id' });
@@ -54,6 +65,7 @@ module.exports = {
   Product,
   Branch,
   Inventory,
+  InventoryMovement,
   Order,
   OrderDetail,
   Payment
