@@ -21,6 +21,13 @@ const inventoryRoutes = require('./routes/inventory.routes');
 const ordersRoutes = require('./routes/orders.routes');
 const branchRoutes = require('./routes/branches.routes');
 
+// Importación de rutas de Mercado Pago
+const mercadoPagoRoutes = require('./routes/mercadopago.routes');
+
+// Importar el SDK de Mercado Pago
+
+const mercadopago = require('mercadopago');
+
 // Inicialización de la aplicación
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -45,6 +52,9 @@ app.use('/api/v1/marcas', brandsRoutes);
 app.use('/api/v1/inventario', inventoryRoutes);
 app.use('/api/v1/pedidos', ordersRoutes);
 app.use('/api/v1/sucursales', branchRoutes);
+
+// Añadir rutas de Mercado Pago
+app.use('/api/v1/mercadopago', mercadoPagoRoutes);
 
 // Ruta base
 app.get('/', (req, res) => {
