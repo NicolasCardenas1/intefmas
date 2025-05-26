@@ -47,17 +47,17 @@ exports.createPreference = async (req, res) => {
       email: order.cliente.email
     };
     
-    // URLs de retorno
-    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-    const back_urls = {
-      success: `${baseUrl}/pages/payment-success.html?order_id=${order.id}`,
-      failure: `${baseUrl}/pages/payment-failure.html?order_id=${order.id}`,
-      pending: `${baseUrl}/pages/payment-pending.html?order_id=${order.id}`
-    };
-    
-    // URL de notificación
-    const backendUrl = process.env.BACKEND_URL || 'http://localhost:3000';
-    const notification_url = `${backendUrl}/api/v1/mercadopago/webhook`;
+  // URLs de retorno - 
+const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+const back_urls = {
+  success: `${baseUrl}/pages/payment-success.html?order_id=${order.id}`,
+  failure: `${baseUrl}/pages/payment-failure.html?order_id=${order.id}`,
+  pending: `${baseUrl}/pages/payment-pending.html?order_id=${order.id}`
+};
+
+// URL Notificación|
+const backendUrl = process.env.BACKEND_URL || 'http://localhost:3000';
+const notification_url = `${backendUrl}/api/v1/mercadopago/webhook`;
     
     // Crear la preferencia
     const preferenceData = {

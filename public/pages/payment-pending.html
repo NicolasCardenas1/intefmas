@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Pendiente - FERREMAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/order-confirmation.css">
+    <style>
+        .pending-icon {
+            color: #f39c12;
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+        .pending-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .status-check {
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><a href="../index.html">FERREMAS</a></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Inicio</a></li>
+                    <li><a href="products.html">Productos</a></li>
+                    <li><a href="#">Nosotros</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <!-- Se actualizará dinámicamente -->
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="confirmation-container">
+                <div class="confirmation-header">
+                    <div class="pending-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h1>Pago en Proceso</h1>
+                    <p>Tu pago está siendo procesado. Te notificaremos cuando se complete.</p>
+                </div>
+
+                <div class="pending-info">
+                    <h3><i class="fas fa-info-circle"></i> Información Important</h3>
+                    <ul style="margin: 15px 0; padding-left: 20px;">
+                        <li>Tu pedido ha sido registrado exitosamente</li>
+                        <li>El pago puede tardar unos minutos en confirmarse</li>
+                        <li>Recibirás un email cuando el pago se procese</li>
+                        <li>Puedes verificar el estado en "Mis Pedidos"</li>
+                    </ul>
+                </div>
+
+                <div class="status-check">
+                    <button onclick="checkPaymentStatus()" class="btn" style="background-color: #17a2b8; color: white;" id="check-status-btn">
+                        <i class="fas fa-sync-alt"></i> Verificar Estado del Pago
+                    </button>
+                </div>
+
+                <div class="order-details">
+                    <h2>Detalles del Pedido</h2>
+                    <div class="order-info" id="order-details">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+
+                <div class="confirmation-actions">
+                    <a href="../index.html" class="btn secondary-btn">
+                        <i class="fas fa-home"></i> Ir al Inicio
+                    </a>
+                    <a href="profile.html" class="btn primary-btn">
+                        <i class="fas fa-user"></i> Ver Mis Pedidos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FERREMAS</h3>
+                    <p>Distribuidora de productos de ferretería y construcción desde 1980.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces rápidos</h3>
+                    <ul>
+                        <li><a href="../index.html">Inicio</a></li>
+                        <li><a href="products.html">Productos</a></li>
+                        <li><a href="#">Nosotros</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contáctanos</h3>
+                    <p>Santiago, Chile</p>
+                    <p>Email: info@ferremas.cl</p>
+                    <p>Teléfono: +56 2 2123 4567</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Síguenos</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 FERREMAS. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        let currentOrderId = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentOrderId = urlParams.get('order_id');
+            
+            if (!currentOrderId) {
+                window.location.href = '../index.html';
+                return;
+            }
+            
+            loadOrderDetails(currentOrderId);
+            
+            // Auto-verificar el estado cada 30 segundos
+            setInterval(() => {
+                checkPaymentStatusSilently();
+            }, 30000);
+        });
+        
+        async function loadOrderDetails(orderId) {
+            try {
+                const token = localStorage.getItem('token');
+                
+                if (!token) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                const response = await fetch(`/api/v1/pedidos/${orderId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error al cargar detalles del pedido');
+                }
+                
+                const order = await response.json();
+                renderOrderDetails(order);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('order-details').innerHTML = `
+                    <div class="error-message">
+                        <p>Error al cargar los detalles del pedido.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function renderOrderDetails(order) {
+            const orderDetailsContainer = document.getElementById('order-details');
+            
+            const orderDate = new Date(order.fecha_pedido);
+            const formattedDate = orderDate.toLocaleDateString('es-CL', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            orderDetailsContainer.innerHTML = `
+                <div class="info-row">
+                    <span>Número de Pedido:</span>
+                    <span>${order.codigo}</span>
+                </div>
+                <div class="info-row">
+                    <span>Fecha:</span>
+                    <span>${formattedDate}</span>
+                </div>
+                <div class="info-row">
+                    <span>Estado:</span>
+                    <span style="color: #f39c12;">Procesando Pago</span>
+                </div>
+                <div class="info-row">
+                    <span>Total:</span>
+                    <span>$${parseInt(order.total).toLocaleString('es-CL')}</span>
+                </div>
+            `;
+        }
+        
+        async function checkPaymentStatus() {
+            if (!currentOrderId) return;
+            
+            const btn = document.getElementById('check-status-btn');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+            btn.disabled = true;
+            
+            try {
+                const token = localStorage.getItem('token');
+                
+                const response = await fetch(`/api/v1/mercadopago/estado/${currentOrderId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error al verificar estado');
+                }
+                
+                const paymentStatus = await response.json();
+                
+                // Redirigir según el estado
+                if (paymentStatus.status === 'approved') {
+                    window.location.href = `payment-success.html?order_id=${currentOrderId}`;
+                } else if (paymentStatus.status === 'rejected') {
+                    window.location.href = `payment-failure.html?order_id=${currentOrderId}`;
+                } else {
+                    // Sigue pendiente
+                    alert('El pago sigue en proceso. Te notificaremos cuando se complete.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al verificar el estado del pago. Intenta nuevamente.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+        
+        // Verificar estado silenciosamente (sin mostrar loading)
+        async function checkPaymentStatusSilently() {
+            if (!currentOrderId) return;
+            
+            try {
+                const token = localStorage.getItem('token');
+                
+                const response = await fetch(`/api/v1/mercadopago/estado/${currentOrderId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const paymentStatus = await response.json();
+                    
+                    if (paymentStatus.status === 'approved') {
+                        window.location.href = `payment-success.html?order_id=${currentOrderId}`;
+                    } else if (paymentStatus.status === 'rejected') {
+                        window.location.href = `payment-failure.html?order_id=${currentOrderId}`;
+                    }
+                }
+            } catch (error) {
+                // Error silencioso, no hacer nada
+                console.log('Error verificando estado (silencioso):', error);
+            }
+        }
+    </script>
+</body>
+</html>

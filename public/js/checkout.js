@@ -354,131 +354,136 @@ function updateConfirmationSummaries() {
 
 // Función para manejar el envío del formulario
 async function handleCheckoutSubmit(e) {
-   e.preventDefault();
-   
-   // Verificar términos y condiciones
-   const termsChecked = document.getElementById('terms').checked;
-   if (!termsChecked) {
-       alert('Debes aceptar los términos y condiciones para continuar');
-       return;
-   }
-   
-   // Obtener datos del formulario
-   const formData = new FormData(e.target);
-   const tipoEntrega = formData.get('tipo_entrega');
-   const metodoPago = formData.get('metodo_pago');
-   
-   // Obtener items del carrito
-   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-   const subtotal = cartItems.reduce((total, item) => total + (item.precio * item.quantity), 0);
-   const iva = subtotal * 0.19;
-   const descuento = cartItems.length >= 4 ? subtotal * 0.05 : 0;
-   const costoEnvio = tipoEntrega === 'despacho_domicilio' ? 5000 : 0;
-   const total = subtotal + iva - descuento + costoEnvio;
-   
-   // Crear objeto con datos del pedido
-   const orderData = {
-       tipo_entrega: tipoEntrega,
-       items: cartItems.map(item => ({
-           producto_id: item.id,
-           cantidad: item.quantity
-       })),
-       subtotal,
-       iva,
-       descuento,
-       costo_envio: costoEnvio,
-       total
-   };
-   
-   // Agregar datos según el tipo de entrega
-   if (tipoEntrega === 'retiro_tienda') {
-       orderData.sucursal_retiro_id = formData.get('sucursal_retiro_id');
-   } else {
-       orderData.direccion_entrega = formData.get('direccion_entrega');
-       orderData.ciudad_entrega = formData.get('ciudad_entrega');
-       orderData.region_entrega = formData.get('region_entrega');
-   }
-   
-   try {
-       // Mostrar indicador de carga
-       document.querySelector('.confirm-order').disabled = true;
-       document.querySelector('.confirm-order').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
-       
-       // Crear pedido
-       const token = localStorage.getItem('token');
-       const orderResponse = await fetch('/api/v1/pedidos', {
-           method: 'POST',
-           headers: {
-               'Content-Type': 'application/json',
-               'Authorization': `Bearer ${token}`
-           },
-           body: JSON.stringify(orderData)
-       });
-       
-       if (!orderResponse.ok) {
-           throw new Error('Error al crear el pedido');
-       }
-       
-       const orderResult = await orderResponse.json();
-       
-       // Procesar pago según el método seleccionado
-       if (metodoPago === 'webpay') {
-           // Iniciar pago con WebPay
-           const paymentResponse = await fetch('/api/v1/pagos/webpay/crear', {
-               method: 'POST',
-               headers: {
-                   'Content-Type': 'application/json',
-                   'Authorization': `Bearer ${token}`
-               },
-               body: JSON.stringify({
-                   orderId: orderResult.order.id
-               })
-           });
-           
-           if (!paymentResponse.ok) {
-               throw new Error('Error al iniciar el pago');
-           }
-           
-           const paymentResult = await paymentResponse.json();
-           
-           // Limpiar carrito
-           localStorage.removeItem('cartItems');
-           
-           // Redirigir a página de WebPay
-           window.location.href = paymentResult.redirectUrl;
-       } else {
-           // Registrar pago por transferencia
-           const comprobante = formData.get('comprobante') || '';
-           
-           const paymentResponse = await fetch('/api/v1/pagos/transferencia/registrar', {
-               method: 'POST',
-               headers: {
-                   'Content-Type': 'application/json',
-                   'Authorization': `Bearer ${token}`
-               },
-               body: JSON.stringify({
-                   orderId: orderResult.order.id,
-                   comprobante,
-                   comentarios: 'Pedido realizado via web'
-               })
-           });
-           
-           if (!paymentResponse.ok) {
-               throw new Error('Error al registrar el pago');
-           }
-           
-           // Limpiar carrito
-           localStorage.removeItem('cartItems');
-           
-           // Redirigir a página de confirmación
-           window.location.href = `order-confirmation.html?id=${orderResult.order.id}`;
-       }
-   } catch (error) {
-       console.error('Error en el proceso de checkout:', error);
-       alert('Ha ocurrido un error al procesar tu pedido. Por favor intenta nuevamente.');
-       
-       // Restaurar botón
-       document.querySelector('.confirm-order').disabled = false;
-       document.querySelector('.confirm-order').textContent = 'Confirmar Pedido';
-   }
+    e.preventDefault();
+    
+    // Verificar términos y condiciones
+    const termsChecked = document.getElementById('terms').checked;
+    if (!termsChecked) {
+        alert('Debes aceptar los términos y condiciones para continuar');
+        return;
+    }
+    
+    // Verificar autenticación antes de proceder
+    const token = localStorage.getItem('token');
+    if (!token || isTokenExpired(token)) {
+        clearExpiredSession();
+        alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    // Obtener datos del formulario
+    const formData = new FormData(e.target);
+    const tipoEntrega = formData.get('tipo_entrega');
+    const metodoPago = formData.get('metodo_pago');
+    
+    // Obtener items del carrito
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    
+    if (cartItems.length === 0) {
+        alert('Tu carrito está vacío');
+        window.location.href = 'cart.html';
+        return;
+    }
+    
+    const subtotal = cartItems.reduce((total, item) => total + (item.precio * item.quantity), 0);
+    const iva = subtotal * 0.19;
+    const descuento = cartItems.length >= 4 ? subtotal * 0.05 : 0;
+    const costoEnvio = tipoEntrega === 'despacho_domicilio' ? 5000 : 0;
+    const total = subtotal + iva - descuento + costoEnvio;
+    
+    // Crear objeto con datos del pedido
+    const orderData = {
+        tipo_entrega: tipoEntrega,
+        items: cartItems.map(item => ({
+            producto_id: item.id,
+            cantidad: item.quantity
+        })),
+        subtotal,
+        iva,
+        descuento,
+        costo_envio: costoEnvio,
+        total
+    };
+    
+    // Agregar datos según el tipo de entrega
+    if (tipoEntrega === 'retiro_tienda') {
+        orderData.sucursal_retiro_id = formData.get('sucursal_retiro_id');
+    } else {
+        orderData.direccion_entrega = formData.get('direccion_entrega');
+        orderData.ciudad_entrega = formData.get('ciudad_entrega');
+        orderData.region_entrega = formData.get('region_entrega');
+    }
+    
+    try {
+        // Mostrar indicador de carga
+        document.querySelector('.confirm-order').disabled = true;
+        document.querySelector('.confirm-order').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+        
+        // Crear pedido usando la función mejorada
+        const orderResponse = await makeAuthenticatedRequest('/api/v1/pedidos', {
+            method: 'POST',
+            body: JSON.stringify(orderData)
+        });
+        
+        if (!orderResponse.ok) {
+            const errorData = await orderResponse.json();
+            throw new Error(errorData.message || 'Error al crear el pedido');
+        }
+        
+        const orderResult = await orderResponse.json();
+        
+        // Limpiar carrito inmediatamente después de crear el pedido exitosamente
+        localStorage.removeItem('cartItems');
+        
+        // Procesar pago según el método seleccionado
+        if (metodoPago === 'webpay') {
+            // Redirigir a la página específica de pago
+            window.location.href = `payment.html?order_id=${orderResult.order.id}`;
+            
+        } else if (metodoPago === 'transferencia') {
+            // Registrar pago por transferencia
+            const comprobante = formData.get('comprobante') || '';
+            
+            const paymentResponse = await makeAuthenticatedRequest('/api/v1/pagos/transferencia/registrar', {
+                method: 'POST',
+                body: JSON.stringify({
+                    orderId: orderResult.order.id,
+                    comprobante,
+                    comentarios: 'Pedido realizado via web'
+                })
+            });
+            
+            if (!paymentResponse.ok) {
+                const errorData = await paymentResponse.json();
+                throw new Error(errorData.message || 'Error al registrar el pago');
+            }
+            
+            // Redirigir a página de confirmación
+            window.location.href = `order-confirmation.html?id=${orderResult.order.id}`;
+        }
+        
+    } catch (error) {
+        console.error('Error en el proceso de checkout:', error);
+        
+        // Manejar error de autenticación
+        if (handleAuthError(error)) {
+            return; // Ya se manejó la redirección
+        }
+        
+        // Mostrar mensaje de error más específico
+        let errorMessage = 'Ha ocurrido un error al procesar tu pedido.';
+        
+        if (error.message.includes('stock')) {
+            errorMessage = 'Algunos productos no tienen stock suficiente. Por favor revisa tu carrito.';
+        } else if (error.message) {
+            errorMessage = error.message;
+        }
+        
+        alert(errorMessage);
+        
+        // Restaurar botón
+        document.querySelector('.confirm-order').disabled = false;
+        document.querySelector('.confirm-order').textContent = 'Confirmar Pedido';
+    }
 }
